@@ -1,11 +1,12 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Eye, EyeOff, Lock, Mail } from "lucide-react"
+import api from "@/lib/axios"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -27,18 +28,23 @@ export default function LoginPage() {
     }))
   }
 
+  const router = useRouter()
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulação de login - substituir por integração real
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      console.log("Login com:", formData)
-      // Redirecionar para dashboard após login bem-sucedido
-      // router.push("/")
-    } catch (error) {
-      console.error("Erro no login:", error)
+      const response = await api.post("/auth/login", {
+        email: formData.email,
+        password: formData.password,
+      })
+
+      console.log("Login bem-sucedido:", response.data)
+      // TODO: salvar token, redirecionar, etc.
+      router.push("/")
+    } catch (error: any) {
+      console.error("Erro no login:", error.response?.data || error.message)
     } finally {
       setIsLoading(false)
     }
@@ -163,7 +169,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Link para cadastro */}
           <div className="mt-6 text-center">
             <p className="text-white/60">
               Não tem uma conta?{" "}
