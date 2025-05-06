@@ -1,19 +1,23 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import api from '@/lib/axios'
 
 export function useSession() {
-  const [session, setSession] = useState<string | null>(null)
+  const [session, setSession] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token') // ajuste se usar outro nome
-    if (token) {
-      setSession(token)
-    } else {
-      setSession(null)
-    }
-    setLoading(false)
+    ;(async () => {
+      try {
+        const { data } = await api.get('/auth/me')
+        setSession(data)                              
+      } catch {
+        setSession(null)
+      } finally {
+        setLoading(false)
+      }
+    })()
   }, [])
 
   return { session, loading }
