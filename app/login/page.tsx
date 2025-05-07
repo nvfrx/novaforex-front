@@ -40,7 +40,10 @@ export default function LoginPage() {
         email: formData.email,
         password: formData.password,
       })
-
+      
+      // forçar a leitura do document.cookie
+      console.log('🍪 document.cookie [client]:', document.cookie);
+      
       console.log("Login bem-sucedido:", response.data)
       router.push("/")
     } catch (error: any) {
