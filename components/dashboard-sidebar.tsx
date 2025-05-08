@@ -1,8 +1,10 @@
+// components/dashboard-sidebar.tsx
 "use client"
 
 import type React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 import {
   Home,
   DollarSign,
@@ -19,6 +21,7 @@ import {
   X,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import api from "@/lib/axios"
 
 type SidebarItemProps = {
   icon: React.ElementType
@@ -63,7 +66,20 @@ export default function DashboardSidebar({
   toggleSidebar,
   className,
 }: DashboardSidebarProps) {
+  const router = useRouter()
+
   const pathname = usePathname()
+
+  // chama o logout no backend e redireciona pra /login
+  const handleLogout = async () => {
+    try {
+      await api.post("/auth/logout")
+    } catch (err) {
+      console.error("Erro ao deslogar:", err)
+    } finally {
+      router.push("/login")
+    }
+  }
 
   const menuItems = [
     { icon: Home, label: "Início", href: "/" },
@@ -149,6 +165,11 @@ export default function DashboardSidebar({
 
       <div className="p-3 border-t border-blue-900/30">
         <button
+          className={cn(
+            "flex items-center gap-3 px-4 py-3 rounded-lg w-full text-red-400 transition-all duration-200 hover:bg-red-500/10 hover:text-red-300 hover:shadow-[0_0_8px_rgba(239,68,68,0.5)]",
+            isCollapsed && !isMobile && "justify-center px-2",
+          )}
+          onClick={handleLogout}
           className={cn(
             "flex items-center gap-3 px-4 py-3 rounded-lg w-full text-red-400 transition-all duration-200 hover:bg-red-500/10 hover:text-red-300 hover:shadow-[0_0_8px_rgba(239,68,68,0.5)]",
             isCollapsed && !isMobile && "justify-center px-2",

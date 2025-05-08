@@ -8,6 +8,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Eye, EyeOff, Lock, Mail, Phone, User, Users } from "lucide-react"
 import api from "@/lib/axios"
+import { toast } from "react-hot-toast" 
 
 export default function CadastroPage() {
   const router = useRouter()
@@ -63,7 +64,11 @@ export default function CadastroPage() {
       router.push("/login")
     } catch (error: any) {
       console.error("Erro no cadastro:", error)
-      alert(error.response?.data?.message || "Erro inesperado no cadastro.")
+      if (error.response?.status === 500) {
+        toast.error("E-mail já cadastrado.")
+      } else {
+        toast.error(error.response?.data?.message || "Erro inesperado.")
+      }
     } finally {
       setIsLoading(false)
     }
