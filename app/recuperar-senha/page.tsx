@@ -1,3 +1,4 @@
+// app/recuperar-senha/page.tsx
 "use client"
 
 import type React from "react"
@@ -36,15 +37,15 @@ export default function RecuperarSenhaPage() {
           <Image
             src="/novaforex-logo-transparent.png"
             alt="NovaForex Logo"
-            width={200}
-            height={80}
-            className="h-20 w-auto object-contain"
+            width={300}
+            height={120}
+            className="h-[104px] w-auto object-contain"
           />
         </div>
 
         {/* Card de Recuperação */}
         <div className="relative p-8 rounded-2xl border border-[#00FFFF]/20 bg-black/40 backdrop-blur-sm">
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#00FFFF]/10 to-[#3B82F6]/10 opacity-20"></div>
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#00FFFF]/10 to-[#3B82F6]/10 opacity-20 pointer-events-none"></div>
 
           <h2 className="text-2xl font-bold text-white mb-2 text-center">Recuperar Senha</h2>
 

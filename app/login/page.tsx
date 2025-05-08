@@ -58,13 +58,13 @@ export default function LoginPage() {
         <div className="w-full max-w-md space-y-8 relative">
           {/* Logo */}
           <div className="flex justify-center">
-            <Image
-              src="/novaforex-logo-transparent.png"
-              alt="NovaForex Logo"
-              width={200}
-              height={80}
-              className="h-20 w-auto object-contain"
-            />
+          <Image
+            src="/novaforex-logo-transparent.png"
+            alt="NovaForex Logo"
+            width={300}
+            height={120}
+            className="h-[104px] w-auto object-contain"
+          />
           </div>
 
           {/* Card de Login */}

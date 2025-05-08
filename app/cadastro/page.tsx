@@ -82,9 +82,9 @@ export default function CadastroPage() {
           <Image
             src="/novaforex-logo-transparent.png"
             alt="NovaForex Logo"
-            width={200}
-            height={80}
-            className="h-20 w-auto object-contain"
+            width={300}
+            height={120}
+            className="h-[104px] w-auto object-contain"
           />
         </div>
 
