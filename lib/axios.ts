@@ -1,6 +1,5 @@
 // lib/axios.ts
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-import { NextRouter } from "next/router";
 
 // Cria instância com baseURL e cookies
 const api = axios.create({
