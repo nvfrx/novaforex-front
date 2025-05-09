@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { PieChart, TrendingUp, Calendar, DollarSign, CheckCircle, Clock } from "lucide-react"
+import { PieChart, TrendingUp, Calendar, DollarSign, CheckCircle, Clock, Calculator, ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 // Tipo para os investimentos
 type Investment = {
@@ -35,6 +37,13 @@ const calculateCurrentValue = (amount: number, date: Date): { value: number; per
     value: currentValue,
     percentage: cappedPercentage,
   }
+}
+
+// Função para calcular o valor com juros compostos (3% ao dia por 47 dias)
+const calculateCompoundInterest = (initialAmount: number): number => {
+  const days = 47
+  const dailyRate = 0.03 // 3%
+  return initialAmount * Math.pow(1 + dailyRate, days)
 }
 
 export default function InvestmentsList() {
@@ -173,82 +182,182 @@ export default function InvestmentsList() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <Card className="bg-black/40 border-gray-800 overflow-hidden hover:border-gray-700 transition-colors">
-                <CardContent className="p-4 md:p-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-                    <div className="space-y-3 md:space-y-4">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="text-base md:text-lg font-medium flex items-center gap-1 md:gap-2">
-                            <DollarSign className="h-4 w-4 md:h-5 md:w-5 text-neon-cyan" /> Valor Investido
-                          </h3>
-                          <p className="text-lg md:text-2xl font-bold">
-                            ${investment.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-                          </p>
-                        </div>
-                        <div className="bg-gray-900 px-2 py-1 md:px-3 md:py-1 rounded-full flex items-center gap-1">
-                          {investment.status === "active" ? (
-                            <>
-                              <Clock className="h-3 w-3 md:h-4 md:w-4 text-neon-cyan" />
-                              <span className="text-[10px] md:text-xs font-medium text-neon-cyan">Ativo</span>
-                            </>
-                          ) : (
-                            <>
-                              <CheckCircle className="h-3 w-3 md:h-4 md:w-4 text-neon-green" />
-                              <span className="text-[10px] md:text-xs font-medium text-neon-green">Concluído</span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-3 md:gap-6 flex-wrap">
-                        <div>
-                          <h4 className="text-xs md:text-sm text-gray-400 flex items-center gap-1">
-                            <Calendar className="h-3 w-3 md:h-4 md:w-4" /> Data
-                          </h4>
-                          <p className="text-sm md:text-base font-medium">
-                            {investment.date.toLocaleDateString("pt-BR")}
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="text-xs md:text-sm text-gray-400 flex items-center gap-1">
-                            <TrendingUp className="h-3 w-3 md:h-4 md:w-4" /> Retorno
-                          </h4>
-                          <p className="text-sm md:text-base font-medium text-neon-green">
-                            +{investment.returnPercentage.toFixed(2)}%
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3 md:space-y-4">
-                      <div>
-                        <h3 className="text-base md:text-lg font-medium flex items-center gap-1 md:gap-2">
-                          <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-neon-green" /> Valor Atual
-                        </h3>
-                        <p className="text-lg md:text-2xl font-bold text-neon-green">
-                          ${investment.currentValue.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-                        </p>
-                      </div>
-
-                      <div className="space-y-1 md:space-y-2">
-                        <div className="flex justify-between text-xs md:text-sm">
-                          <span className="text-gray-400">Progresso</span>
-                          <span className="font-medium">{investment.returnPercentage.toFixed(2)}% / 300%</span>
-                        </div>
-                        <div className="relative h-3 md:h-4 w-full overflow-hidden rounded-full bg-gray-900">
-                          <div
-                            className="h-full bg-gradient-to-r from-neon-cyan to-neon-green rounded-full transition-all duration-1000 ease-out progress-glow"
-                            style={{ width: `${(investment.returnPercentage / 300) * 100}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <InvestmentCard investment={investment} />
             </motion.div>
           ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+// Componente de Card de Investimento com Calculadora de Juros Compostos
+function InvestmentCard({ investment }: { investment: Investment }) {
+  const [compoundingEnabled, setCompoundingEnabled] = useState(false)
+
+  // Calcular o valor final com juros compostos (3% ao dia por 47 dias)
+  const compoundInterestAmount = calculateCompoundInterest(investment.amount)
+
+  // Calcular o valor com retorno fixo de 300%
+  const fixedReturnAmount = investment.amount * 3
+
+  return (
+    <Card className="bg-black/40 border-gray-800 overflow-hidden hover:border-gray-700 transition-colors">
+      <CardContent className="p-4 md:p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div className="space-y-3 md:space-y-4">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-base md:text-lg font-medium flex items-center gap-1 md:gap-2">
+                  <DollarSign className="h-4 w-4 md:h-5 md:w-5 text-neon-cyan" /> Valor Investido
+                </h3>
+                <p className="text-lg md:text-2xl font-bold">
+                  ${investment.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                </p>
+              </div>
+              <div className="bg-gray-900 px-2 py-1 md:px-3 md:py-1 rounded-full flex items-center gap-1">
+                {investment.status === "active" ? (
+                  <>
+                    <Clock className="h-3 w-3 md:h-4 md:w-4 text-neon-cyan" />
+                    <span className="text-[10px] md:text-xs font-medium text-neon-cyan">Ativo</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="h-3 w-3 md:h-4 md:w-4 text-neon-green" />
+                    <span className="text-[10px] md:text-xs font-medium text-neon-green">Concluído</span>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 md:gap-6 flex-wrap">
+              <div>
+                <h4 className="text-xs md:text-sm text-gray-400 flex items-center gap-1">
+                  <Calendar className="h-3 w-3 md:h-4 md:w-4" /> Data
+                </h4>
+                <p className="text-sm md:text-base font-medium">{investment.date.toLocaleDateString("pt-BR")}</p>
+              </div>
+              <div>
+                <h4 className="text-xs md:text-sm text-gray-400 flex items-center gap-1">
+                  <TrendingUp className="h-3 w-3 md:h-4 md:w-4" /> Retorno
+                </h4>
+                <p className="text-sm md:text-base font-medium text-neon-green">
+                  +{investment.returnPercentage.toFixed(2)}%
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3 md:space-y-4">
+            <div>
+              <h3 className="text-base md:text-lg font-medium flex items-center gap-1 md:gap-2">
+                <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-neon-green" /> Valor Atual
+              </h3>
+              <p className="text-lg md:text-2xl font-bold text-neon-green">
+                ${investment.currentValue.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              </p>
+            </div>
+
+            <div className="space-y-1 md:space-y-2">
+              <div className="flex justify-between text-xs md:text-sm">
+                <span className="text-gray-400">Progresso</span>
+                <span className="font-medium">{investment.returnPercentage.toFixed(2)}% / 300%</span>
+              </div>
+              <div className="relative h-3 md:h-4 w-full overflow-hidden rounded-full bg-gray-900">
+                <div
+                  className="h-full bg-gradient-to-r from-neon-cyan to-neon-green rounded-full transition-all duration-1000 ease-out progress-glow"
+                  style={{ width: `${(investment.returnPercentage / 300) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Seção de Juros Compostos */}
+        <div className="mt-6 pt-6 border-t border-gray-800">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Calculator className="h-5 w-5 text-purple-500" />
+              <h3 className="text-base md:text-lg font-medium">Juros Compostos</h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor={`compound-toggle-${investment.id}`} className="text-sm text-gray-400">
+                {compoundingEnabled ? "Ativado" : "Desativado"}
+              </Label>
+              <Switch
+                id={`compound-toggle-${investment.id}`}
+                checked={compoundingEnabled}
+                onCheckedChange={setCompoundingEnabled}
+                className="data-[state=checked]:bg-purple-600"
+              />
+            </div>
+          </div>
+
+          <div className="bg-black/60 rounded-xl p-4 border border-gray-800 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ArrowRight className="h-4 w-4 text-purple-500" />
+                <span className="text-sm md:text-base">Retorno final:</span>
+              </div>
+              <span className="text-lg md:text-xl font-bold text-purple-500">
+                $
+                {compoundingEnabled
+                  ? compoundInterestAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })
+                  : fixedReturnAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+
+            {compoundingEnabled && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-2 bg-purple-900/20 p-3 rounded-lg border border-purple-900/30"
+              >
+                <div className="flex-shrink-0 bg-purple-900/40 rounded-full p-2">
+                  <Calculator className="h-4 w-4 text-purple-400" />
+                </div>
+                <p className="text-xs md:text-sm text-purple-200">
+                  Juros compostos ativado. O rendimento diário será automaticamente reinvestido por 47 dias
+                  consecutivos.
+                </p>
+              </motion.div>
+            )}
+
+            <div className="grid grid-cols-3 gap-2 text-center text-xs md:text-sm">
+              <div className="bg-black/40 p-2 rounded-lg border border-gray-800">
+                <p className="text-gray-400">Valor Inicial</p>
+                <p className="font-medium">${investment.amount.toLocaleString("en-US")}</p>
+              </div>
+              {compoundingEnabled ? (
+                <>
+                  <div className="bg-black/40 p-2 rounded-lg border border-gray-800">
+                    <p className="text-gray-400">Taxa Diária</p>
+                    <p className="font-medium text-purple-400">3%</p>
+                  </div>
+                  <div className="bg-black/40 p-2 rounded-lg border border-gray-800">
+                    <p className="text-gray-400">Período</p>
+                    <p className="font-medium">47 dias</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="bg-black/40 p-2 rounded-lg border border-gray-800">
+                    <p className="text-gray-400">Retorno Fixo</p>
+                    <p className="font-medium text-purple-400">300%</p>
+                  </div>
+                  <div className="bg-black/40 p-2 rounded-lg border border-gray-800">
+                    <p className="text-gray-400">Multiplicador</p>
+                    <p className="font-medium">3x</p>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <Button className="w-full bg-gradient-to-r from-purple-700 to-purple-500 hover:from-purple-600 hover:to-purple-400 text-white font-medium rounded-xl shadow-lg shadow-purple-900/20">
+              {compoundingEnabled ? "Aplicar Juros Compostos" : "Aplicar Retorno Fixo"}
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
