@@ -13,7 +13,11 @@ const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title: "Quantum Flux | Advanced Trading Platform",
+  title: "Nova Forex | Advanced Trading Platform",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   description: "Futuristic trading platform with advanced analytics",
     generator: 'v0.dev'
 }

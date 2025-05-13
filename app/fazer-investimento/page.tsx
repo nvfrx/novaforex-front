@@ -1,15 +1,19 @@
-import InvestmentForm from "@/components/investment-form"
-import DashboardLayout from "@/components/dashboard-layout"
-import PageTransition from "@/components/page-transition"
+// app/fazer-investimento/page.tsx
+import DashboardLayout from '@/components/dashboard-layout'
+import PageTransition from '@/components/page-transition'
+import ProtectedRoute from '@/components/protected-route'
+import InvestmentForm from '@/components/investment-form'
 
 export default function InvestPage() {
   return (
-    <DashboardLayout>
-      <PageTransition>
-        <div className="max-w-3xl mx-auto">
-          <InvestmentForm />
-        </div>
-      </PageTransition>
-    </DashboardLayout>
+    <ProtectedRoute>
+      <DashboardLayout>
+        <PageTransition>
+          <div className="max-w-3xl mx-auto py-8">
+            <InvestmentForm />
+          </div>
+        </PageTransition>
+      </DashboardLayout>
+    </ProtectedRoute>
   )
 }

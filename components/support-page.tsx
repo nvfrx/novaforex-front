@@ -207,7 +207,7 @@ export default function SupportPage() {
                     Participe do nosso grupo oficial no Telegram para suporte e novidades.
                   </p>
                   <Button
-                    onClick={() => window.open("https://t.me/quantumflux", "_blank")}
+                    onClick={() => window.open("https://t.me/novaforex", "_blank")}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white hover:shadow-[0_0_15px_rgba(37,99,235,0.5)] transition-all duration-300"
                   >
                     Entrar no Telegram
@@ -252,7 +252,7 @@ export default function SupportPage() {
                     Participe da nossa comunidade no WhatsApp e conecte-se com outros investidores.
                   </p>
                   <Button
-                    onClick={() => window.open("https://chat.whatsapp.com/quantumflux", "_blank")}
+                    onClick={() => window.open("https://chat.whatsapp.com/novaforex", "_blank")}
                     className="w-full bg-green-600 hover:bg-green-700 text-white hover:shadow-[0_0_15px_rgba(22,163,74,0.5)] transition-all duration-300"
                   >
                     Entrar na Comunidade do WhatsApp

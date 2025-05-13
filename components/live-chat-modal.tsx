@@ -41,7 +41,7 @@ export default function LiveChatModal({ isOpen, onClose }: LiveChatModalProps) {
         setMessages([
           {
             id: 1,
-            text: "Olá! Bem-vindo ao suporte da Quantum Flux. Como posso ajudar você hoje?",
+            text: "Olá! Bem-vindo ao suporte da Nova Forex. Como posso ajudar você hoje?",
             sender: "agent",
             timestamp: new Date(),
           },
@@ -98,7 +98,7 @@ export default function LiveChatModal({ isOpen, onClose }: LiveChatModalProps) {
           "Para fazer um novo investimento, acesse a seção 'Fazer investimento' no menu lateral. Oferecemos rendimentos diários competitivos e o valor mínimo para investimento é de $20."
       } else if (lowerCaseMessage.includes("senha") || lowerCaseMessage.includes("esqueci")) {
         agentResponse =
-          "Para redefinir sua senha, acesse a seção 'Segurança' no menu lateral. Se você não conseguir acessar sua conta, por favor, envie um e-mail para suporte@quantumflux.com com seu nome completo e endereço de e-mail cadastrado."
+          "Para redefinir sua senha, acesse a seção 'Segurança' no menu lateral. Se você não conseguir acessar sua conta, por favor, envie um e-mail para suporte@novaforex.com com seu nome completo e endereço de e-mail cadastrado."
       }
 
       const agentMessage: Message = {
@@ -138,7 +138,7 @@ export default function LiveChatModal({ isOpen, onClose }: LiveChatModalProps) {
               <MessageSquare className="h-5 w-5 text-neon-green" />
             </div>
             <div>
-              <h2 className="text-lg font-medium">Suporte Quantum Flux</h2>
+              <h2 className="text-lg font-medium">Suporte Nova Forex</h2>
               <div className="flex items-center gap-1.5">
                 <div className="h-2 w-2 rounded-full bg-neon-green"></div>
                 <span className="text-xs text-gray-400">Online</span>
